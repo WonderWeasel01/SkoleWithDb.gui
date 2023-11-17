@@ -10,7 +10,10 @@ public class DbSql {
         connection = null;
         stmt = null;
         try {
-            String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleDb/identifier.sqlite";
+            //Windows
+            String url = "jdbc:sqlite:C:/Users/alexw/IdeaProjects/SkoleWithDb.gui/identifier.sqlite";
+            //Mac
+            // String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleDb/identifier.sqlite";
             connection = DriverManager.getConnection(url);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
