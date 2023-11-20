@@ -46,7 +46,7 @@ public class StuderendeGui extends JFrame {
             //Windows
             //String url = "jdbc:sqlite:C:/Users/alexw/IdeaProjects/SkoleWithDb.gui/identifier.sqlite";
             //Mac
-            String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleDb/identifier.sqlite";
+            String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleWithDb.gui/identifier.sqlite";
             connection = DriverManager.getConnection(url);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -66,7 +66,8 @@ public class StuderendeGui extends JFrame {
                 Studpanel.setVisible(false);
                 VisStuderendePanel.setVisible(true);
                 studerendeListModel.clear();
-                printStud();
+                updateStudList();
+                Print();
 
             }
         });
@@ -88,30 +89,33 @@ public class StuderendeGui extends JFrame {
 
 
 
-    public void printStud() {
+    public void updateStudList() {
         studerendeListModel.clear();
         try {
             Statement stmt = connection.createStatement();
-            String sql = "select * from main.Studerende ";
+            String sql = "select * from main.Studerende";
             ResultSet rs = stmt.executeQuery(sql);
-
-            System.out.println("Connection to SQLite has been established.");
 
             while (rs.next()) {
                 int stdnr = rs.getInt("stdnr");
                 String fnavn = rs.getString("fnavn");
                 String enavn = rs.getString("enavn");
 
-
                 studerendeListModel.addElement(stdnr + ": " + fnavn + " " + enavn);
             }
 
             StuderendeList.setModel(studerendeListModel);
 
+            // Close the ResultSet and Statement
+            rs.close();
             stmt.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public void Print(){
+        System.out.println(studerendeListModel);
     }
 
 
