@@ -3,6 +3,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import javax.swing.DefaultListModel;
+import java.sql.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.DefaultListModel;
 
 public class StuderendeGui extends JFrame {
     private DefaultListModel<String> studerendeListModel = new DefaultListModel<>();
@@ -26,6 +35,7 @@ public class StuderendeGui extends JFrame {
     private JPanel startpanel;
     private JList StuderendeList;
     private JPanel VisStuderendePanel;
+    private JButton backButton;
 
 
     public StuderendeGui() {
@@ -45,14 +55,19 @@ public class StuderendeGui extends JFrame {
         Studerende.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleStudpanel();
+                startpanel.setVisible(false);
+                Studpanel.setVisible(true);
             }
         });
 
         udskrivAlleStuderendeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleVisStuderende();
+                Studpanel.setVisible(false);
+                VisStuderendePanel.setVisible(true);
+                studerendeListModel.clear();
+                printStud();
+
             }
         });
 
@@ -69,20 +84,12 @@ public class StuderendeGui extends JFrame {
         setVisible(true);
     }
 
-    public void handleStudpanel() {
-        startpanel.setVisible(false);
-        Studpanel.setVisible(true);
 
-    }
 
-    public void handleVisStuderende() {
-        DbSql db=new DbSql();
-        Studpanel.setVisible(false);
-        VisStuderendePanel.setVisible(true);
-        printStud();
-    }
+
 
     public void printStud() {
+        studerendeListModel.clear();
         try {
             Statement stmt = connection.createStatement();
             String sql = "select * from main.Studerende ";
@@ -108,10 +115,5 @@ public class StuderendeGui extends JFrame {
     }
 
 
-//Main
-    public static void main(String[] args) {
-        StuderendeGui panel = new StuderendeGui();
-        panel.alleStuderende();
-    }
 }
 
