@@ -1,8 +1,17 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
+import javax.swing.DefaultListModel;
 
 public class StuderendeGui extends JFrame {
+    private DefaultListModel<String> studerendeListModel = new DefaultListModel<>();
+
+
+    private Connection connection;
+    private Statement stmt;
+    private Statement stmt1;
+
     private JButton holdButton;
     private JPanel panel1;
     private JButton Studerende;
@@ -15,8 +24,24 @@ public class StuderendeGui extends JFrame {
     private JPanel Studpanel;
     private JPanel FagPanel;
     private JPanel startpanel;
+    private JList StuderendeList;
+    private JPanel VisStuderendePanel;
+
 
     public StuderendeGui() {
+
+        connection = null;
+        stmt = null;
+        try {
+            //Windows
+            //String url = "jdbc:sqlite:C:/Users/alexw/IdeaProjects/SkoleWithDb.gui/identifier.sqlite";
+            //Mac
+            String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleDb/identifier.sqlite";
+            connection = DriverManager.getConnection(url);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         Studerende.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -30,12 +55,11 @@ public class StuderendeGui extends JFrame {
                 handleVisStuderende();
             }
         });
+
+
     }
 
-    public static void main(String[] args) {
-        StuderendeGui panel = new StuderendeGui();
-        panel.alleStuderende();
-    }
+
 
     public void alleStuderende() {
         setContentPane(panel1);
@@ -53,7 +77,41 @@ public class StuderendeGui extends JFrame {
 
     public void handleVisStuderende() {
         DbSql db=new DbSql();
-        db.alleStuderende();
+        Studpanel.setVisible(false);
+        VisStuderendePanel.setVisible(true);
+        printStud();
+    }
 
+    public void printStud() {
+        try {
+            Statement stmt = connection.createStatement();
+            String sql = "select * from main.Studerende ";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            System.out.println("Connection to SQLite has been established.");
+
+            while (rs.next()) {
+                int stdnr = rs.getInt("stdnr");
+                String fnavn = rs.getString("fnavn");
+                String enavn = rs.getString("enavn");
+
+
+                studerendeListModel.addElement(stdnr + ": " + fnavn + " " + enavn);
+            }
+
+            StuderendeList.setModel(studerendeListModel);
+
+            stmt.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+
+//Main
+    public static void main(String[] args) {
+        StuderendeGui panel = new StuderendeGui();
+        panel.alleStuderende();
     }
 }
+
