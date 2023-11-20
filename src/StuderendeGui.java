@@ -3,15 +3,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import javax.swing.DefaultListModel;
-import java.sql.*;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.DefaultListModel;
 
 public class StuderendeGui extends JFrame {
     private DefaultListModel<String> studerendeListModel = new DefaultListModel<>();
@@ -36,6 +31,7 @@ public class StuderendeGui extends JFrame {
     private JList StuderendeList;
     private JPanel VisStuderendePanel;
     private JButton backButton;
+    private JButton backButton_panel1;
 
 
     public StuderendeGui() {
@@ -60,6 +56,16 @@ public class StuderendeGui extends JFrame {
             }
         });
 
+        backButton_panel1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Studpanel.setVisible(false);
+                startpanel.setVisible(true);
+            }
+        });
+
+
+
         udskrivAlleStuderendeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,6 +74,15 @@ public class StuderendeGui extends JFrame {
                 studerendeListModel.clear();
                 updateStudList();
                 Print();
+
+            }
+        });
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Studpanel.setVisible(true);
+                VisStuderendePanel.setVisible(false);
 
             }
         });
@@ -103,10 +118,7 @@ public class StuderendeGui extends JFrame {
 
                 studerendeListModel.addElement(stdnr + ": " + fnavn + " " + enavn);
             }
-
             StuderendeList.setModel(studerendeListModel);
-
-            // Close the ResultSet and Statement
             rs.close();
             stmt.close();
         } catch (SQLException throwables) {
