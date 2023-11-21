@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.sql.*;
 import javax.swing.DefaultListModel;
 import java.sql.Connection;
@@ -13,6 +15,8 @@ public class StuderendeGui extends JFrame {
 
 
     private Connection connection;
+
+    private PreparedStatement Pstmt;
     private Statement stmt;
     private Statement stmt1;
 
@@ -32,6 +36,11 @@ public class StuderendeGui extends JFrame {
     private JPanel VisStuderendePanel;
     private JButton backButton;
     private JButton backButton_panel1;
+    private JPanel CreateStudent;
+    private JTextField IDTextField;
+    private JTextField navnTextField;
+    private JTextField efterNavnTextField;
+    private JButton opretStuderendeButton1;
 
 
     public StuderendeGui() {
@@ -40,9 +49,9 @@ public class StuderendeGui extends JFrame {
         stmt = null;
         try {
             //Windows
-            //String url = "jdbc:sqlite:C:/Users/alexw/IdeaProjects/SkoleWithDb.gui/identifier.sqlite";
+            String url = "jdbc:sqlite:C:/Users/alexw/IdeaProjects/SkoleWithDb.gui/identifier.sqlite";
             //Mac
-            String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleWithDb.gui/identifier.sqlite";
+            //String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleWithDb.gui/identifier.sqlite";
             connection = DriverManager.getConnection(url);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -73,7 +82,7 @@ public class StuderendeGui extends JFrame {
                 VisStuderendePanel.setVisible(true);
                 studerendeListModel.clear();
                 updateStudList();
-                Print();
+
 
             }
         });
@@ -88,6 +97,22 @@ public class StuderendeGui extends JFrame {
         });
 
 
+        opretStuderendeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Studpanel.setVisible(false);
+                CreateStudent.setVisible(true);
+
+            }
+        });
+
+        opretStuderendeButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                OpretStudBtn();
+
+            }
+        });
     }
 
 
@@ -126,9 +151,24 @@ public class StuderendeGui extends JFrame {
         }
     }
 
-    public void Print(){
-        System.out.println(studerendeListModel);
+    public void OpretStudBtn() {
+        studerendeListModel.clear();
+        try {
+            String sql = "insert into main.Studerende(stdnr,fnavn, enavn) values (?,?,?)";
+
+
+            PreparedStatement Pstmt = connection.prepareStatement(sql);
+            Pstmt.setInt(1, Integer.parseInt(IDTextField.getText()));
+            Pstmt.setString(2, navnTextField.getText());
+            Pstmt.setString(3, efterNavnTextField.getText());
+            boolean rs = Pstmt.execute();
+
+            Pstmt.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
+
 
 
 }
