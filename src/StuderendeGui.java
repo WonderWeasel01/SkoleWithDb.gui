@@ -45,6 +45,7 @@ public class StuderendeGui extends JFrame {
     private JLabel IDLabel;
     private JButton fjernStuderendeButton1;
     private JButton BackToStudPanel2;
+    private JLabel FjernetLabel;
 
 
     public StuderendeGui() {
@@ -83,6 +84,7 @@ public class StuderendeGui extends JFrame {
                 FjernStuderende();
                 Studpanel.setVisible(false);
                 FjernStuderende.setVisible(true);
+                FjernetLabel.setVisible(true);
             }
         });
 
@@ -99,6 +101,7 @@ public class StuderendeGui extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 FjernStuderende.setVisible(false);
                 Studpanel.setVisible(true);
+                FjernetLabel.setVisible(false);
             }
         });
 
