@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.sql.*;
 import javax.swing.DefaultListModel;
 import java.sql.Connection;
@@ -41,6 +39,12 @@ public class StuderendeGui extends JFrame {
     private JTextField navnTextField;
     private JTextField efterNavnTextField;
     private JButton opretStuderendeButton1;
+    private JButton BackToStudPanel;
+    private JPanel FjernStuderende;
+    private JTextField FjernStuderendetextField1;
+    private JLabel IDLabel;
+    private JButton fjernStuderendeButton1;
+    private JButton BackToStudPanel2;
 
 
     public StuderendeGui() {
@@ -49,9 +53,9 @@ public class StuderendeGui extends JFrame {
         stmt = null;
         try {
             //Windows
-            String url = "jdbc:sqlite:C:/Users/alexw/IdeaProjects/SkoleWithDb.gui/identifier.sqlite";
+            //String url = "jdbc:sqlite:C:/Users/alexw/IdeaProjects/SkoleWithDb.gui/identifier.sqlite";
             //Mac
-            //String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleWithDb.gui/identifier.sqlite";
+            String url = "jdbc:sqlite:/Users/alexwentzel/Documents/1Semester/SkoleWithDb.gui/identifier.sqlite";
             connection = DriverManager.getConnection(url);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -61,6 +65,39 @@ public class StuderendeGui extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 startpanel.setVisible(false);
+                Studpanel.setVisible(true);
+            }
+        });
+
+        fjernStuderendeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Studpanel.setVisible(false);
+                FjernStuderende.setVisible(true);
+            }
+        });
+
+        fjernStuderendeButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FjernStuderende();
+                Studpanel.setVisible(false);
+                FjernStuderende.setVisible(true);
+            }
+        });
+
+        BackToStudPanel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreateStudent.setVisible(false);
+                Studpanel.setVisible(true);
+            }
+        });
+
+        BackToStudPanel2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FjernStuderende.setVisible(false);
                 Studpanel.setVisible(true);
             }
         });
@@ -161,6 +198,24 @@ public class StuderendeGui extends JFrame {
             Pstmt.setInt(1, Integer.parseInt(IDTextField.getText()));
             Pstmt.setString(2, navnTextField.getText());
             Pstmt.setString(3, efterNavnTextField.getText());
+            boolean rs = Pstmt.execute();
+
+            Pstmt.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+
+    public void FjernStuderende() {
+        studerendeListModel.clear();
+        try {
+            String sql = "DELETE FROM Studerende WHERE fnavn=?";
+
+
+            PreparedStatement Pstmt = connection.prepareStatement(sql);
+            Pstmt.setString(1, (FjernStuderendetextField1.getText()));
+
             boolean rs = Pstmt.execute();
 
             Pstmt.close();
