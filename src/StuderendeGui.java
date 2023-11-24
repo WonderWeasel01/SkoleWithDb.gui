@@ -46,6 +46,7 @@ public class StuderendeGui extends JFrame {
     private JButton fjernStuderendeButton1;
     private JButton BackToStudPanel2;
     private JLabel FjernetLabel;
+    private JLabel oprettetStuderendeLabel;
 
 
     public StuderendeGui() {
@@ -127,6 +128,9 @@ public class StuderendeGui extends JFrame {
             }
         });
 
+
+
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -150,6 +154,7 @@ public class StuderendeGui extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 OpretStudBtn();
+                oprettetStuderendeLabel.setVisible(true);
 
             }
         });
