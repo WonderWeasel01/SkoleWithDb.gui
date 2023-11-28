@@ -3,6 +3,5 @@ public class Main {
 
         StuderendeGui panel = new StuderendeGui();
         panel.alleStuderende();
-
     }
 }
